@@ -12,7 +12,7 @@
     let setAmount = null;
     let setId = null;
     //reactive
-    $: isEditing = setId ? true:false;
+    $: isEditing = setId ? true : false;
     $: total = expenses.reduce((acc, curr) => {
         // console.log({acc, amount: curr.amount})
         return (acc += curr.amount)
@@ -32,15 +32,24 @@
         let expense = {id: Math.random() * Date.now(), name, amount};
         expenses = [expense, ...expenses]
     }
-    function setModifiedExpense(id){
+
+    function setModifiedExpense(id) {
         let expense = expenses.find(item => item.id === id);
         setId = expense.id;
         setName = expense.name;
         setAmount = expense.amount;
     }
-    function editExpense({name, amount}){
-        console.log({name, amount});
+
+    function editExpense({name, amount}) {
+        expenses = expenses.map(item => {
+            return item.id === setId ? {...item, name, amount} : {...item}
+        });
+        setId = null;
+        setAmount = null;
+        setName = "";
+
     }
+
     //context
     setContext('remove', removeExpense);
     setContext('modify', setModifiedExpense);
